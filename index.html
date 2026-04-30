@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Game Backlog</title>
+</head>
+<body>
+
+<h1>Game Backlog</h1>
+
+<input id="title" placeholder="Game title">
+<input id="platform" placeholder="Platform">
+<input id="rating" placeholder="Rating (1-10)">
+<button onclick="addGame()">Add Game</button>
+
+<ul id="list"></ul>
+
+<script>
+async function loadGames() {
+    const res = await fetch('/games');
+    const games = await res.json();
+
+    const list = document.getElementById('list');
+    list.innerHTML = '';
+
+    games.forEach(game => {
+        const li = document.createElement('li');
+        li.innerHTML = `
+            ${game.title} (${game.platform}) - ${game.status} ${game.rating || '-'}
+             <button onclick="completeGame(${game.id})">
+        <svg width="16" height="16">
+            <use href="symbol-defs1.svg#check"></use>
+        </svg>
+    </button>
+
+    <button onclick="deleteGame(${game.id})">
+        <svg width="16" height="16">
+            <use href="./symbol-defs1.svg#close"></use>
+        </svg>
+    </button>
+        `;
+        list.appendChild(li);
+    });
+}
+
+async function addGame() {
+    const title = document.getElementById('title').value;
+    const platform = document.getElementById('platform').value;
+    const rating = document.getElementById('rating').value;
+
+    await fetch('/games', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+       body: JSON.stringify({ 
+        title, 
+        platform, 
+        status: 'planned', 
+        rating 
+        })
+    });
+
+    loadGames();
+}
+
+async function deleteGame(id) {
+    await fetch('/games/' + id, { method: 'DELETE' });
+    loadGames();
+}
+
+async function completeGame(id) {
+    await fetch('/games/' + id, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            status: 'completed',
+            rating: 10
+        })
+    });
+
+    loadGames();
+}
+
+loadGames();
+</script>
+
+</body>
+</html>
