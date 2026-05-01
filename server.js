@@ -18,7 +18,9 @@ CREATE TABLE IF NOT EXISTS games (
     title TEXT,
     platform TEXT,
     status TEXT,
-    rating INTEGER
+    rating INTEGER,
+    added_at TEXT,
+    completed_at TEXT
 )
 `);
 
@@ -29,32 +31,34 @@ app.get('/games', (req, res) => {
     });
 });
 app.get('/', (req, res) => {
-    db.all("SELECT * FROM games", [], (err, rows) => {
-        res.json(rows);
-    });
+    res.sendFile(__dirname + '/index.html');
 });
 
-// POST add game
-app.post('/games', (req, res) => {
+// POST add game   
+    app.post('/games', (req, res) => {
     const { title, platform, status, rating } = req.body;
+    const added_at = new Date().toLocaleDateString('en-GB');
 
     db.run(
-        "INSERT INTO games (title, platform, status, rating) VALUES (?, ?, ?, ?)",
-        [title, platform, status, rating],
+        "INSERT INTO games (title, platform, status, rating, added_at) VALUES (?, ?, ?, ?, ?)",
+        [title, platform, status, rating, added_at],
         function(err) {
             res.json({ id: this.lastID });
         }
     );
 });
 
+
+
 // PUT update status
 app.put('/games/:id', (req, res) => {
     const id = req.params.id;
-    const { status, rating } = req.body;
+    const { status } = req.body;
+    const completed_at = status === 'completed' ? new Date().toLocaleDateString('en-GB') : null;
 
     db.run(
-        "UPDATE games SET status = ?, rating = ? WHERE id = ?",
-        [status, rating, id],
+        "UPDATE games SET status = ?, completed_at = ? WHERE id = ?",
+        [status, completed_at, id],
         () => res.send("Updated")
     );
 });
