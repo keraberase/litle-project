@@ -488,3 +488,228 @@ if (savedToken && savedUserId && savedUsername) {
 } else {
     showAuthForm();
 }
+
+let chartInstances = {};
+ 
+function destroyCharts() {
+    Object.values(chartInstances).forEach(c => c && c.destroy());
+    chartInstances = {};
+}
+ 
+// ── Общие настройки Chart.js под тему ──
+const CHART_DEFAULTS = {
+    color: '#888',
+    font: { family: 'Orbitron, sans-serif', size: 10 },
+};
+ 
+const GRID_COLOR  = 'rgba(255,255,255,0.05)';
+const TICK_COLOR  = '#555';
+ 
+function baseScales() {
+    return {
+        x: {
+            ticks: { color: TICK_COLOR, font: { size: 9 } },
+            grid:  { color: GRID_COLOR },
+        },
+        y: {
+            ticks: { color: TICK_COLOR, font: { size: 9 } },
+            grid:  { color: GRID_COLOR },
+            beginAtZero: true,
+        },
+    };
+}
+ 
+// ── Загрузка статистики и отрисовка ──
+async function loadAndRenderStats() {
+    try {
+        const res = await fetch('/games/stats/detailed', {
+            headers: { 'Authorization': `Bearer ${authToken}` },
+        });
+        if (!res.ok) { console.error('Stats fetch failed'); return; }
+ 
+        const data = await res.json();
+        destroyCharts();
+        renderSummary(data.summary);
+        renderStatusChart(data.byStatus);
+        renderRatingChart(data.byRating);
+        renderHoursChart(data.topByHours);
+        renderMonthlyChart(data.byMonth);
+    } catch (e) {
+        console.error('Stats error:', e);
+    }
+}
+ 
+function renderSummary(s) {
+    if (!s) return;
+    document.getElementById('sSummaryTotal').textContent     = s.total     ?? '0';
+    document.getElementById('sSummaryCompleted').textContent = s.completed ?? '0';
+    document.getElementById('sSummaryHours').textContent     = s.total_hours != null ? s.total_hours + 'h' : '0h';
+    document.getElementById('sSummaryRating').textContent    = s.avg_rating != null  ? '★ ' + s.avg_rating : '—';
+}
+ 
+function renderStatusChart(rows) {
+    const STATUS_COLORS = {
+        planned:   '#555577',
+        playing:   '#ffaa00',
+        completed: '#00ff88',
+        dropped:   '#ff5555',
+    };
+ 
+    const labels = rows.map(r => r.status.toUpperCase());
+    const values = rows.map(r => r.count);
+    const colors = rows.map(r => STATUS_COLORS[r.status] || '#888');
+ 
+    const ctx = document.getElementById('chartStatus').getContext('2d');
+    chartInstances.status = new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+            labels,
+            datasets: [{
+                data: values,
+                backgroundColor: colors.map(c => c + 'cc'),
+                borderColor:     colors,
+                borderWidth: 2,
+                hoverOffset: 8,
+            }],
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            cutout: '65%',
+            plugins: {
+                legend: {
+                    position: 'bottom',
+                    labels: { color: '#888', font: { size: 9, family: 'Orbitron' }, padding: 12 },
+                },
+                tooltip: {
+                    callbacks: {
+                        label: ctx => ` ${ctx.label}: ${ctx.raw} games`,
+                    },
+                },
+            },
+        },
+    });
+}
+ 
+function renderRatingChart(rows) {
+
+    const fullData = [1, 2, 3, 4, 5].map(star => {
+        const found = rows.find(r => r.rating === star);
+        return found ? found.count : 0;
+    });
+ 
+    const ctx = document.getElementById('chartRating').getContext('2d');
+    chartInstances.rating = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: ['★', '★★', '★★★', '★★★★', '★★★★★'],
+            datasets: [{
+                data: fullData,
+                backgroundColor: [
+                    '#ff555544', '#ff888844', '#ffaa0044', '#88ff0044', '#fbb03b66',
+                ],
+                borderColor: [
+                    '#ff5555', '#ff8888', '#ffaa00', '#88ff00', '#fbb03b',
+                ],
+                borderWidth: 2,
+                borderRadius: 3,
+            }],
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { display: false } },
+            scales: baseScales(),
+        },
+    });
+}
+ 
+function renderHoursChart(rows) {
+    if (!rows || rows.length === 0) {
+        document.getElementById('chartHours').parentElement.innerHTML =
+            '<div style="color:#333;font-family:\'Press Start 2P\',monospace;font-size:0.5rem;text-align:center;padding:60px 0;">NO HOURS DATA</div>';
+        return;
+    }
+ 
+    const STATUS_BORDER = { planned: '#555577', playing: '#ffaa00', completed: '#00ff88', dropped: '#ff5555' };
+ 
+    const ctx = document.getElementById('chartHours').getContext('2d');
+    chartInstances.hours = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: rows.map(r => r.title.length > 18 ? r.title.slice(0, 16) + '…' : r.title),
+            datasets: [{
+                data:            rows.map(r => r.hours),
+                backgroundColor: rows.map(r => (STATUS_BORDER[r.status] || '#00ffff') + '44'),
+                borderColor:     rows.map(r => STATUS_BORDER[r.status]  || '#00ffff'),
+                borderWidth: 2,
+                borderRadius: 3,
+            }],
+        },
+        options: {
+            indexAxis: 'y',
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { display: false },
+                tooltip: { callbacks: { label: ctx => ` ${ctx.raw}h` } },
+            },
+            scales: {
+                x: { ...baseScales().x, ticks: { ...baseScales().x.ticks, callback: v => v + 'h' } },
+                y: { ...baseScales().y, ticks: { color: '#aaa', font: { size: 9 } } },
+            },
+        },
+    });
+}
+ 
+function renderMonthlyChart(rows) {
+    if (!rows || rows.length === 0) {
+        document.getElementById('chartMonthly').parentElement.innerHTML =
+            '<div style="color:#333;font-family:\'Press Start 2P\',monospace;font-size:0.5rem;text-align:center;padding:60px 0;">NO MONTHLY DATA</div>';
+        return;
+    }
+ 
+    const ctx = document.getElementById('chartMonthly').getContext('2d');
+    chartInstances.monthly = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: rows.map(r => r.month),
+            datasets: [{
+                data:            rows.map(r => r.count),
+                borderColor:     '#ff00ff',
+                backgroundColor: 'rgba(255,0,255,0.08)',
+                borderWidth: 2,
+                pointBackgroundColor: '#ff00ff',
+                pointRadius: 4,
+                pointHoverRadius: 6,
+                fill: true,
+                tension: 0.3,
+            }],
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { display: false } },
+            scales: baseScales(),
+        },
+    });
+}
+ 
+// ── Кнопка открытия ──
+document.getElementById('statsBtn').addEventListener('click', () => {
+    document.getElementById('statsModal').style.display = 'flex';
+    loadAndRenderStats();
+});
+ 
+document.getElementById('closeStatsBtn').addEventListener('click', () => {
+    document.getElementById('statsModal').style.display = 'none';
+    destroyCharts();
+});
+ 
+
+document.getElementById('statsModal').addEventListener('click', function(e) {
+    if (e.target === this) {
+        this.style.display = 'none';
+        destroyCharts();
+    }
+});

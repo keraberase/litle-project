@@ -8,10 +8,12 @@ const jwt = require('jsonwebtoken');
 const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
+const { setupSwagger } = require('./swagger');
 
 
 const app = express();
 
+setupSwagger(app);
 // IGDB Token management
 let igdbToken = null;
 let tokenExpires = 0;
@@ -387,7 +389,70 @@ app.put('/games/:id', authenticateToken, upload.single('cover'), (req, res) => {
         );
     });
 });
-
+app.get('/games/stats/detailed', authenticateToken, (req, res) => {
+    const userId = req.user.id;
+ 
+    const queries = {
+        // Distribution by status
+        byStatus: `
+            SELECT status, COUNT(*) as count
+            FROM games WHERE user_id = ?
+            GROUP BY status
+        `,
+        // Top 8 games by hours
+        topByHours: `
+            SELECT title, hours, status
+            FROM games WHERE user_id = ? AND hours > 0
+            ORDER BY hours DESC LIMIT 8
+        `,
+        // Games by month of addition (last 12 months)
+        byMonth: `
+            SELECT 
+                substr(added_at, 4, 2) || '/' || substr(added_at, 7, 4) as month,
+                COUNT(*) as count
+            FROM games 
+            WHERE user_id = ? AND added_at IS NOT NULL
+            GROUP BY month
+            ORDER BY substr(added_at, 7, 4), substr(added_at, 4, 2)
+            LIMIT 12
+        `,
+        // Distribution by rating
+        byRating: `
+            SELECT rating, COUNT(*) as count
+            FROM games WHERE user_id = ? AND rating IS NOT NULL
+            GROUP BY rating ORDER BY rating
+        `,
+        // General summary
+        summary: `
+            SELECT 
+                COUNT(*) as total,
+                ROUND(AVG(CASE WHEN rating IS NOT NULL THEN rating END), 1) as avg_rating,
+                ROUND(SUM(hours), 1) as total_hours,
+                COUNT(CASE WHEN status = 'completed' THEN 1 END) as completed,
+                COUNT(CASE WHEN status = 'planned'   THEN 1 END) as planned,
+                COUNT(CASE WHEN status = 'playing'   THEN 1 END) as playing,
+                COUNT(CASE WHEN status = 'dropped'   THEN 1 END) as dropped
+            FROM games WHERE user_id = ?
+        `,
+    };
+ 
+    const run = (sql, params) =>
+        new Promise((resolve, reject) =>
+            db.all(sql, params, (err, rows) => (err ? reject(err) : resolve(rows)))
+        );
+ 
+    Promise.all([
+        run(queries.byStatus,   [userId]),
+        run(queries.topByHours, [userId]),
+        run(queries.byMonth,    [userId]),
+        run(queries.byRating,   [userId]),
+        run(queries.summary,    [userId]),
+    ])
+        .then(([byStatus, topByHours, byMonth, byRating, summary]) => {
+            res.json({ byStatus, topByHours, byMonth, byRating, summary: summary[0] });
+        })
+        .catch(err => res.status(500).json({ error: err.message }));
+});
 // Delete game
 app.delete('/games/:id', authenticateToken, (req, res) => {
     const { id } = req.params;
