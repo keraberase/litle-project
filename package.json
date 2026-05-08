@@ -8,7 +8,7 @@
   },
   "engines": {
     "node": "20.x"
-},
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/keraberase/litle-project.git"
@@ -30,7 +30,7 @@
     "jsonwebtoken": "^9.0.3",
     "multer": "^2.1.1",
     "pdfkit": "^0.18.0",
-    "sqlite3": "^6.0.1",
+    "sqlite3": "^5.1.6",
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^5.0.1"
   }
