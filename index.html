@@ -1,236 +1,11 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Game Backlog</title>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Orbitron:wght@400;700&display=swap');
- 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
- 
-        body {
-            background: #050510;
-            color: #e0e0e0;
-            font-family: 'Orbitron', Arial, sans-serif;
-            min-height: 100vh;
-            padding: 40px 20px;
-            background-image: 
-                radial-gradient(ellipse at 20% 20%, #1a0030 0%, transparent 50%),
-                radial-gradient(ellipse at 80% 80%, #001a30 0%, transparent 50%);
-        }
- 
-        body::before {
-            content: '';
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            background: repeating-linear-gradient(
-                0deg, transparent, transparent 2px,
-                rgba(0,0,0,0.15) 2px, rgba(0,0,0,0.15) 4px
-            );
-            pointer-events: none;
-            z-index: 100;
-        }
- 
-        h1 {
-            text-align: center;
-            font-family: 'Press Start 2P', monospace;
-            font-size: 1.6rem;
-            margin-bottom: 8px;
-            letter-spacing: 2px;
-            background: linear-gradient(90deg, #ff00ff, #00ffff, #ff00ff);
-            background-size: 200%;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            animation: shimmer 3s linear infinite;
-        }
- 
-        @keyframes shimmer {
-            0% { background-position: 0% }
-            100% { background-position: 200% }
-        }
- 
-        .subtitle {
-            text-align: center;
-            font-size: 0.6rem;
-            color: #555;
-            letter-spacing: 4px;
-            margin-bottom: 40px;
-            font-family: 'Press Start 2P', monospace;
-        }
- 
-        .form-card {
-            background: rgba(255,255,255,0.03);
-            border: 1px solid #ff00ff44;
-            border-radius: 4px;
-            padding: 24px;
-            max-width: 720px;
-            margin: 0 auto 40px;
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-            position: relative;
-            box-shadow: 0 0 30px #ff00ff22, inset 0 0 30px rgba(255,0,255,0.03);
-        }
- 
-        .form-card::before {
-            content: '// ADD GAME';
-            position: absolute;
-            top: -11px; left: 16px;
-            font-family: 'Press Start 2P', monospace;
-            font-size: 0.55rem;
-            color: #ff00ff;
-            background: #050510;
-            padding: 0 8px;
-        }
- 
-        .form-card input {
-            flex: 1;
-            min-width: 130px;
-            padding: 10px 14px;
-            background: rgba(0,0,0,0.5);
-            border: 1px solid #333;
-            border-radius: 4px;
-            color: #00ffff;
-            font-family: 'Orbitron', monospace;
-            font-size: 0.8rem;
-            outline: none;
-            transition: border 0.2s, box-shadow 0.2s;
-        }
- 
-        .form-card input::placeholder { color: #444; }
-        .form-card input:focus { border-color: #00ffff; box-shadow: 0 0 10px #00ffff44; }
- 
-        .btn-add {
-            padding: 10px 20px;
-            background: linear-gradient(135deg, #ff00ff, #7700ff);
-            color: #fff;
-            border: none;
-            border-radius: 4px;
-            font-family: 'Press Start 2P', monospace;
-            font-size: 0.6rem;
-            cursor: pointer;
-            transition: transform 0.1s, box-shadow 0.2s;
-            box-shadow: 0 0 15px #ff00ff66;
-        }
- 
-        .btn-add:hover { transform: scale(1.05); box-shadow: 0 0 25px #ff00ffaa; }
-        .btn-add:active { transform: scale(0.97); }
- 
-        .counter {
-            text-align: center;
-            font-family: 'Press Start 2P', monospace;
-            font-size: 0.55rem;
-            color: #555;
-            margin-bottom: 16px;
-            letter-spacing: 2px;
-        }
-        .counter span { color: #00ffff; }
- 
-        .game-list {
-            max-width: 720px;
-            margin: 0 auto;
-            list-style: none;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
- 
-        .game-item {
-            background: rgba(255,255,255,0.02);
-            border: 1px solid #222;
-            border-left: 3px solid #ff00ff;
-            border-radius: 4px;
-            padding: 14px 18px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 12px;
-            transition: border-color 0.2s, box-shadow 0.2s;
-        }
- 
-        .game-item:hover { border-color: #ff00ff; box-shadow: 0 0 20px #ff00ff22; }
-        .game-item.completed { border-left-color: #00ff88; opacity: 0.7; }
-        .game-item.completed:hover { border-color: #00ff88; box-shadow: 0 0 20px #00ff8822; }
- 
-        .game-info { flex: 1; min-width: 0; }
- 
-        .game-title {
-            font-size: 0.85rem;
-            font-weight: 700;
-            color: #fff;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
- 
-        .game-meta {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-top: 6px;
-            flex-wrap: wrap;
-        }
- 
-        .platform-badge {
-            font-size: 0.6rem;
-            color: #888;
-            border: 1px solid #333;
-            border-radius: 3px;
-            padding: 2px 8px;
-            font-family: 'Press Start 2P', monospace;
-        }
- 
-        .status-badge {
-            font-size: 0.55rem;
-            font-family: 'Press Start 2P', monospace;
-            padding: 2px 8px;
-            border-radius: 3px;
-        }
- 
-        .status-planned { color: #888; border: 1px solid #333; }
-        .status-completed { color: #00ff88; border: 1px solid #00ff8844; background: rgba(0,255,136,0.05); }
- 
-        .stars { display: flex; align-items: center; gap: 3px; margin-top: 6px; }
- 
-        .game-actions { display: flex; gap: 8px; flex-shrink: 0; }
- 
-        .btn-complete {
-            background: rgba(0,255,136,0.1);
-            border: 1px solid #00ff8844;
-            border-radius: 4px;
-            padding: 7px 10px;
-            cursor: pointer;
-            transition: all 0.2s;
-            display: flex;
-            align-items: center;
-        }
- 
-        .btn-complete:hover { background: rgba(0,255,136,0.2); box-shadow: 0 0 10px #00ff8844; }
- 
-        .btn-delete {
-            background: rgba(255,50,50,0.1);
-            border: 1px solid #ff333344;
-            border-radius: 4px;
-            padding: 7px 10px;
-            cursor: pointer;
-            transition: all 0.2s;
-            display: flex;
-            align-items: center;
-            color: #ff5555;
-        }
- 
-        .btn-delete:hover { background: rgba(255,50,50,0.2); box-shadow: 0 0 10px #ff333344; }
- 
-        .empty {
-            text-align: center;
-            color: #333;
-            font-family: 'Press Start 2P', monospace;
-            font-size: 0.65rem;
-            padding: 60px 20px;
-            line-height: 2.5;
-        }
-        .empty span { color: #ff00ff; }
-    </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="style/main.css">
+    <script src="./Javascript/index.js" defer></script>
 </head>
 <body>
  
@@ -249,113 +24,119 @@
     </defs>
 </svg>
  
-<h1>GAME BACKLOG</h1>
-<p class="subtitle">[ YOUR QUEST LOG ]</p>
- 
-<div class="form-card">
-    <input id="title" placeholder="game title..."/>
-    <input id="platform" placeholder="platform..."/>
-    <input id="rating" placeholder="rating 1-5" type="number" min="1" max="5"/>
-    <button class="btn-add" onclick="addGame()">▶ ADD</button>
+<!-- Auth Container -->
+<div id="authContainer" class="auth-container">
+    <div class="auth-card">
+        <h2 id="authTitle" style="text-align:center; margin-bottom:20px;">LOGIN</h2>
+        <input type="text" id="authUsername" placeholder="USERNAME">
+        <input type="password" id="authPassword" placeholder="PASSWORD">
+        <button id="authBtn">LOGIN</button>
+        <div class="switch-auth" id="switchAuth">
+            NO ACCOUNT? <span>REGISTER</span>
+        </div>
+    </div>
 </div>
  
-<p class="counter" id="counter">LOADING...</p>
-<ul class="game-list" id="list"></ul>
+<!-- Main  -->
+<div id="mainApp" class="main-app">
+    <div class="navbar">
+        <span style="color:#ff00ff;">GAME BACKLOG</span>
+        <div>
+            <span id="currentUser" style="color:#00ffff; margin-right:15px;"></span>
+            <button class="logout-btn" id="logoutBtn">LOGOUT</button>
+        </div>
+    </div>
  
-<script>
-async function loadGames() {
-    const res = await fetch('/games');
-    const games = await res.json();
-    const list = document.getElementById('list');
-    const counter = document.getElementById('counter');
+    <!-- Stats -->
+    <div class="stats-container">
+        <div class="stat-card"><h3>TOTAL GAMES</h3><p id="statTotal">0</p></div>
+        <div class="stat-card"><h3>PLANNED</h3><p id="statPlanned">0</p></div>
+        <div class="stat-card"><h3>COMPLETED</h3><p id="statCompleted">0</p></div>
+        <div class="stat-card"><h3>TOTAL HOURS</h3><p id="statHours"></p></div>
+    </div>
  
-    const planned = games.filter(g => g.status === 'planned').length;
-    const completed = games.filter(g => g.status === 'completed').length;
-    counter.innerHTML = `PLANNED: <span>${planned}</span> &nbsp;|&nbsp; COMPLETED: <span>${completed}</span>`;
+    <!-- Filters -->
+    <div class="filters">
+        <input type="text" id="searchFilter" placeholder="SEARCH GAMES...">
+        <select id="statusFilter">
+            <option value="">ALL STATUS</option>
+            <option value="planned">PLANNED</option>
+            <option value="playing">PLAYING</option>
+            <option value="completed">COMPLETED</option>
+            <option value="dropped">DROPPED</option>
+        </select>
+        <select id="sortBy">
+            <option value="added_at">SORT BY DATE</option>
+            <option value="title">SORT BY TITLE</option>
+            <option value="rating">SORT BY RATING</option>
+            <option value="hours">SORT BY HOURS</option>
+        </select>
+    </div>
  
-    list.innerHTML = '';
+    <!-- Add Game Form -->
+    <div class="form-card">
+        <div class="search-section">
+            <input id="searchGame" placeholder="🔍 SEARCH GAME ON IGDB..." autocomplete="off"/>
+            <div id="searchResults" class="search-results" style="display: none;"></div>
+        </div>
+        
+        <div class="input-row">
+            <input id="title" placeholder="GAME TITLE *">
+            <input id="platform" placeholder="PLATFORM">
+            <select id="gameStatus">
+                <option value="planned">PLANNED</option>
+                <option value="playing">PLAYING</option>
+                <option value="completed">COMPLETED</option>
+                <option value="dropped">DROPPED</option>
+            </select>
+        </div>
+        
+        <div class="input-row">
+            <input id="rating" placeholder="RATING 1-5" type="number" min="1" max="5">
+            <input id="hours" placeholder="HOURS PLAYED" type="number" step="0.5" value="0">
+            <input id="tags" placeholder="TAGS (RPG, ACTION)">
+        </div>
+        
+      <div id="selectedPreview" class="selected-preview">
+    <img id="previewImg" src="">
+    <div>
+        <strong id="previewTitle"></strong><br>
+        <div id="previewPlatforms" style="display:flex; flex-wrap:wrap; gap:6px; margin-top:8px;"></div>
+    </div>
+</div>
+        
+        <input type="hidden" id="coverUrl">
+        <button class="btn-add" id="addBtn">▶ ADD GAME</button>
+    </div>
  
-    if (games.length === 0) {
-        list.innerHTML = '<div class="empty">NO GAMES YET<br><span>[ START YOUR BACKLOG ]</span></div>';
-        return;
-    }
+    <p class="counter" id="counter">LOADING...</p>
+    <ul class="game-list" id="list"></ul>
+    <div id="pagination" class="pagination"></div>
+</div>
  
-    games.forEach(game => {
-        const li = document.createElement('li');
-        li.className = 'game-item' + (game.status === 'completed' ? ' completed' : '');
-        li.innerHTML = `
-            <div class="game-info">
-                <div class="game-title">${game.title}</div>
-                <div class="game-meta">
-                    <span class="platform-badge">${game.platform || '???'}</span>
-                    <span class="status-badge status-${game.status}">${game.status.toUpperCase()}</span>
-                </div>
-                <div class="stars">${renderStars(game.rating)}</div>
-            </div>
-            <div class="game-actions">
-                ${game.status !== 'completed' ? `
-                <button class="btn-complete" onclick="completeGame(${game.id})" title="Mark completed">
-                    <svg width="18" height="18"><use href="#check"></use></svg>
-                </button>` : ''}
-                <button class="btn-delete" onclick="deleteGame(${game.id})" title="Delete">
-                    <svg width="18" height="18"><use href="#close"></use></svg>
-                </button>
-                <div class="game-meta">
-                <span class="platform-badge">${game.platform || '???'}</span>
-                <span class="status-badge status-${game.status}">${game.status.toUpperCase()}</span>
-                ${game.added_at ? `<span style="font-size:0.55rem;color:#555;font-family:monospace">ADDED: ${game.added_at}</span>` : ''}
-                ${game.completed_at ? `<span style="font-size:0.55rem;color:#00ff8877;font-family:monospace">DONE: ${game.completed_at}</span>` : ''}
-                </div>
-            </div>
-        `;
-        list.appendChild(li);
-    });
-}
+<!-- Edit Modal -->
+<div id="editModal" class="modal">
+    <div class="modal-content">
+        <h3> EDIT GAME</h3>
+        <input type="hidden" id="editId">
+        <input type="text" id="editTitle" placeholder="TITLE">
+        <input type="text" id="editPlatform" placeholder="PLATFORM">
+        <select id="editStatus">
+            <option value="planned">PLANNED</option>
+            <option value="playing">PLAYING</option>
+            <option value="completed">COMPLETED</option>
+            <option value="dropped">DROPPED</option>
+        </select>
+        <input type="number" id="editRating" placeholder="RATING 1-5" min="1" max="5">
+        <input type="number" id="editHours" placeholder="HOURS PLAYED" step="0.5">
+        <input type="text" id="editTags" placeholder="TAGS">
+        <div class="modal-actions">
+            <button id="saveEditBtn" style="background:#00ff88; color:#000;">SAVE</button>
+            <button id="closeModalBtn" style="background:#ff5555;">CANCEL</button>
+        </div>
+    </div>
+</div>
  
-async function addGame() {
-    const title = document.getElementById('title').value.trim();
-    const platform = document.getElementById('platform').value.trim();
-    const rating = parseInt(document.getElementById('rating').value);
- 
-    if (!title) { alert('Enter a game title!'); return; }
-    if (isNaN(rating) || rating < 1 || rating > 5) { alert('Rating must be 1 to 5!'); return; }
- 
-    await fetch('/games', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ title, platform, status: 'planned', rating })
-    });
- 
-    document.getElementById('title').value = '';
-    document.getElementById('platform').value = '';
-    document.getElementById('rating').value = '';
-    loadGames();
-}
- 
-async function deleteGame(id) {
-    await fetch('/games/' + id, { method: 'DELETE' });
-    loadGames();
-}
- 
-async function completeGame(id) {
-    await fetch('/games/' + id, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ status: 'completed' })
-    });
-    loadGames();
-}
- 
-function renderStars(rating) {
-    if (!rating) return '<span style="color:#333;font-size:0.65rem;font-family:monospace">NOT RATED</span>';
-    let stars = '';
-    for (let i = 0; i < 5; i++) {
-        stars += `<svg width="14" height="14" style="opacity:${i < rating ? '1' : '0.1'}"><use href="#star"></use></svg>`;
-    }
-    return stars;
-}
- 
-loadGames();
-</script>
+
 </body>
 </html>
