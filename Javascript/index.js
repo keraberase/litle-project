@@ -215,8 +215,7 @@ async function loadGames() {
     
     const list = document.getElementById('list');
     const counter = document.getElementById('counter');
-    counter.innerHTML = `📊 TOTAL: <span>${stats.total || 0}</span> &nbsp;|&nbsp; ✅ COMPLETED: <span>${stats.completed || 0}</span> &nbsp;|&nbsp; ⏱️ HOURS: <span>${(stats.total_hours || 0).toFixed(1)}</span>`;
-    
+   
     list.innerHTML = '';
     
     if (!games || games.length === 0) {
@@ -480,13 +479,41 @@ const savedToken = localStorage.getItem('token');
 const savedUserId = localStorage.getItem('userId');
 const savedUsername = localStorage.getItem('username');
 
+function hideLoader() {
+    const loader = document.getElementById('loadingScreen');
+    loader.style.opacity = '0';
+    loader.style.transition = 'opacity 0.3s ease';
+    setTimeout(() => loader.style.display = 'none', 300);
+}
+
 if (savedToken && savedUserId && savedUsername) {
     authToken = savedToken;
     currentUserId = savedUserId;
     currentUsername = savedUsername;
-    showMainApp();
+
+    document.getElementById('authContainer').style.display = 'none';
+    document.getElementById('mainApp').style.display = 'none';
+    document.getElementById('loadingBar').style.width = '60%';
+
+    fetch('/games?page=1&limit=1', {
+        headers: { 'Authorization': `Bearer ${authToken}` }
+    }).then(res => {
+        document.getElementById('loadingBar').style.width = '100%';
+        setTimeout(() => {
+            hideLoader();
+            if (res.ok) showMainApp();
+            else logout();
+        }, 300);
+    }).catch(() => {
+        hideLoader();
+        showMainApp();
+    });
 } else {
-    showAuthForm();
+    document.getElementById('loadingBar').style.width = '100%';
+    setTimeout(() => {
+        hideLoader();
+        showAuthForm();
+    }, 500);
 }
 
 let chartInstances = {};
@@ -496,7 +523,7 @@ function destroyCharts() {
     chartInstances = {};
 }
  
-// ── Общие настройки Chart.js под тему ──
+// Chart styling defaults
 const CHART_DEFAULTS = {
     color: '#888',
     font: { family: 'Orbitron, sans-serif', size: 10 },
@@ -519,7 +546,7 @@ function baseScales() {
     };
 }
  
-// ── Загрузка статистики и отрисовка ──
+// Load stats
 async function loadAndRenderStats() {
     try {
         const res = await fetch('/games/stats/detailed', {
@@ -602,7 +629,7 @@ function renderRatingChart(rows) {
     chartInstances.rating = new Chart(ctx, {
         type: 'bar',
         data: {
-            labels: ['★', '★★', '★★★', '★★★★', '★★★★★'],
+            labels: ['1 star', '2 stars', '3 stars', '4 stars', '5 stars'],
             datasets: [{
                 data: fullData,
                 backgroundColor: [
@@ -662,40 +689,9 @@ function renderHoursChart(rows) {
     });
 }
  
-function renderMonthlyChart(rows) {
-    if (!rows || rows.length === 0) {
-        document.getElementById('chartMonthly').parentElement.innerHTML =
-            '<div style="color:#333;font-family:\'Press Start 2P\',monospace;font-size:0.5rem;text-align:center;padding:60px 0;">NO MONTHLY DATA</div>';
-        return;
-    }
+
  
-    const ctx = document.getElementById('chartMonthly').getContext('2d');
-    chartInstances.monthly = new Chart(ctx, {
-        type: 'line',
-        data: {
-            labels: rows.map(r => r.month),
-            datasets: [{
-                data:            rows.map(r => r.count),
-                borderColor:     '#ff00ff',
-                backgroundColor: 'rgba(255,0,255,0.08)',
-                borderWidth: 2,
-                pointBackgroundColor: '#ff00ff',
-                pointRadius: 4,
-                pointHoverRadius: 6,
-                fill: true,
-                tension: 0.3,
-            }],
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: { legend: { display: false } },
-            scales: baseScales(),
-        },
-    });
-}
- 
-// ── Кнопка открытия ──
+// Button to open stats modal
 document.getElementById('statsBtn').addEventListener('click', () => {
     document.getElementById('statsModal').style.display = 'flex';
     loadAndRenderStats();
@@ -713,3 +709,6 @@ document.getElementById('statsModal').addEventListener('click', function(e) {
         destroyCharts();
     }
 });
+const value = "Poly16";
+const numerical = Number.parseFloat(value);
+console.log(numerical); 

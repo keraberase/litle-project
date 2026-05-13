@@ -1,4 +1,3 @@
-
 @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Orbitron:wght@400;700&display=swap');
  
 * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -10,8 +9,13 @@ body {
     min-height: 100vh;
     padding: 40px 20px;
     background-image: 
-    radial-gradient(ellipse at 20% 20%, #1a0030 0%, transparent 50%),
-    radial-gradient(ellipse at 80% 80%, #001a30 0%, transparent 50%);
+    url(../images/1697422326_zefirka-club-p-mnogo-igr-na-odnoi-kartinke-8.jpg);
+    radial-gradient(ellipse at 20% 20%, #1a003099 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 80%, #001a3099 0%, transparent 50%),
+    linear-gradient(rgba(5, 5, 16, 0.85), rgba(5, 5, 16, 0.85));
+    background-size: auto;
+    background-position: center;
+    background-repeat: no-repeat;
 }
  
 body::before {
@@ -28,7 +32,7 @@ body::before {
 h1 {
     text-align: center;
     font-family: 'Press Start 2P', monospace;
-    font-size: 1.6rem;
+    font-size: 26px;
     margin-bottom: 8px;
     letter-spacing: 2px;
     background: linear-gradient(90deg, #ff00ff, #00ffff, #ff00ff);
@@ -45,14 +49,13 @@ h1 {
  
 .subtitle {
     text-align: center;
-    font-size: 0.6rem;
+    font-size: 10px;
     color: #555;
     letter-spacing: 4px;
     margin-bottom: 40px;
     font-family: 'Press Start 2P', monospace;
 }
  
-        /* Auth Container */
 .auth-container {
     max-width: 400px;
     margin: 100px auto;
@@ -72,12 +75,13 @@ h1 {
     position: absolute;
     top: -11px; left: 16px;
     font-family: 'Press Start 2P', monospace;
-    font-size: 0.55rem;
+    font-size: 9px;
     color: #ff00ff;
     background: #050510;
     padding: 0 8px;
 }
- .auth-card input {
+
+.auth-card input {
     width: 100%;
     padding: 12px;
     margin: 10px 0;
@@ -103,7 +107,7 @@ h1 {
     border: none;
     border-radius: 4px;
     font-family: 'Press Start 2P', monospace;
-    font-size: 0.6rem;
+    font-size: 10px;
     cursor: pointer;
 }
  
@@ -112,14 +116,13 @@ h1 {
     margin-top: 20px;
     color: #888;
     cursor: pointer;
-    font-size: 0.7rem;
+    font-size: 11px;
 }
  
 .switch-auth span {
     color: #00ffff;
 }
  
-/* Main App */
 .main-app {
     display: none;
 }
@@ -127,7 +130,8 @@ h1 {
 .navbar {
     max-width: 1000px;
     margin: 0 auto 20px;
-    background: rgba(255,255,255,0.03);
+    background: rgba(5, 5, 16, 0.85);
+    backdrop-filter: blur(4px);
     border: 1px solid #ff00ff44;
     border-radius: 4px;
     padding: 15px 20px;
@@ -143,21 +147,23 @@ h1 {
     border-radius: 4px;
     color: #ff5555;
     font-family: 'Press Start 2P', monospace;
-    font-size: 0.5rem;
+    font-size: 8px;
     cursor: pointer;
 }
  
-/* Stats Cards */
 .stats-container {
     max-width: 1000px;
     margin: 0 auto 20px;
     display: grid;
+    background: rgba(5, 5, 16, 0.85);
+    backdrop-filter: blur(4px);
     grid-template-columns: repeat(4, 1fr);
     gap: 15px;
 }
  
 .stat-card {
-    background: rgba(255,255,255,0.03);
+    background: rgba(5, 5, 16, 0.85);
+    backdrop-filter: blur(4px);
     border: 1px solid #00ffff44;
     border-radius: 4px;
     padding: 15px;
@@ -165,22 +171,22 @@ h1 {
 }
  
 .stat-card h3 {
-    font-size: 0.6rem;
+    font-size: 10px;
     color: #888;
     margin-bottom: 8px;
 }
  
 .stat-card p {
-    font-size: 1.5rem;
+    font-size: 24px;
     color: #00ffff;
     font-weight: bold;
 }
  
-/* Filters */
 .filters {
     max-width: 1000px;
     margin: 0 auto 20px;
-    background: rgba(255,255,255,0.03);
+    background: rgba(5, 5, 16, 0.85);
+    backdrop-filter: blur(4px);
     border: 1px solid #333;
     border-radius: 4px;
     padding: 15px;
@@ -207,11 +213,12 @@ h1 {
     color: #00ffff;
     cursor: pointer;
     font-family: 'Press Start 2P', monospace;
-    font-size: 0.5rem;
+    font-size: 8px;
 }
  
 .form-card {
-    background: rgba(255,255,255,0.03);
+    background: rgba(5, 5, 16, 0.85);
+    backdrop-filter: blur(4px);
     border: 1px solid #ff00ff44;
     border-radius: 4px;
     padding: 24px;
@@ -229,7 +236,7 @@ h1 {
     position: absolute;
     top: -11px; left: 16px;
     font-family: 'Press Start 2P', monospace;
-    font-size: 0.55rem;
+    font-size: 9px;
     color: #ff00ff;
     background: #050510;
     padding: 0 8px;
@@ -248,7 +255,7 @@ h1 {
     border-radius: 4px;
     color: #00ffff;
     font-family: 'Orbitron', monospace;
-    font-size: 0.8rem;
+    font-size: 13px;
     outline: none;
 }
  
@@ -299,13 +306,13 @@ h1 {
  
 .search-result-title {
     font-weight: bold;
-    font-size: 0.75rem;
+    font-size: 12px;
     color: #fff;
     margin-bottom: 4px;
 }
  
 .search-result-meta {
-    font-size: 0.6rem;
+    font-size: 10px;
     color: #888;
 }
  
@@ -340,7 +347,7 @@ h1 {
     border-radius: 4px;
     color: #00ffff;
     font-family: 'Orbitron', monospace;
-    font-size: 0.8rem;
+    font-size: 13px;
     outline: none;
 }
  
@@ -353,14 +360,16 @@ h1 {
     border: none;
     border-radius: 4px;
     font-family: 'Press Start 2P', monospace;
-    font-size: 0.6rem;
+    font-size: 10px;
     cursor: pointer;
 }
  
 .counter {
     text-align: center;
+    background: transparent;
+    text-shadow: 0 0 10px rgba(0,0,0,0.9), 0 2px 4px rgba(0,0,0,1);
     font-family: 'Press Start 2P', monospace;
-    font-size: 0.55rem;
+    font-size: 9px;
     color: #555;
     margin-bottom: 16px;
 }
@@ -380,7 +389,8 @@ h1 {
 .game-item {
     display: flex;
     flex-direction: column;
-    background: rgba(255,255,255,0.02);
+    background: rgba(5, 5, 16, 0.85);
+    backdrop-filter: blur(4px);
     border: 1px solid #222;
     border-left: 3px solid #ff00ff;
     border-radius: 4px;
@@ -397,7 +407,7 @@ h1 {
 }
  
 .game-cover-img {
-      width: 100%;
+    width: 100%;
     height: auto;
     aspect-ratio: 3/4;
     object-fit: cover;
@@ -411,7 +421,7 @@ h1 {
 }
  
 .game-title {
-    font-size: 0.85rem;
+    font-size: 14px;
     font-weight: 700;
     color: #fff;
     margin-bottom: 8px;
@@ -426,7 +436,7 @@ h1 {
 }
  
 .platform-badge {
-    font-size: 0.55rem;
+    font-size: 9px;
     color: #888;
     border: 1px solid #333;
     border-radius: 3px;
@@ -435,7 +445,7 @@ h1 {
 }
  
 .status-badge {
-    font-size: 0.5rem;
+    font-size: 8px;
     font-family: 'Press Start 2P', monospace;
     padding: 2px 6px;
     border-radius: 3px;
@@ -472,20 +482,20 @@ h1 {
     display: flex;
     gap: 12px;
     margin: 8px 0;
-    font-size: 0.7rem;
+    font-size: 11px;
     color: #888;
 }
  
 .game-details span { color: #00ffff; }
  
 .tags {
-    font-size: 0.6rem;
+    font-size: 10px;
     color: #555;
     margin-top: 8px;
 }
 
 .platform-tag {
-    font-size: 0.55rem;
+    font-size: 9px;
     font-family: 'Press Start 2P', monospace;
     color: #888;
     border: 1px solid #333;
@@ -509,7 +519,7 @@ h1 {
     border-radius: 4px;
     cursor: pointer;
     font-family: 'Press Start 2P', monospace;
-    font-size: 0.45rem;
+    font-size: 7px;
 }
  
 .btn-complete {
@@ -534,12 +544,11 @@ h1 {
     text-align: center;
     color: #333;
     font-family: 'Press Start 2P', monospace;
-    font-size: 0.65rem;
+    font-size: 10px;
     padding: 60px 20px;
     grid-column: 1/-1;
 }
  
-/* Modal */
 .modal {
     display: none;
     position: fixed;
@@ -554,7 +563,8 @@ h1 {
 }
  
 .modal-content {
-    background: #0a0a20;
+    background: rgba(5, 5, 16, 0.85);
+    backdrop-filter: blur(4px);
     border: 1px solid #ff00ff;
     border-radius: 4px;
     padding: 30px;
@@ -615,7 +625,7 @@ h1 {
     border-radius: 4px;
     color: #ff00ff;
     font-family: 'Press Start 2P', monospace;
-    font-size: 0.5rem;
+    font-size: 8px;
     cursor: pointer;
     margin-right: 10px;
     transition: background 0.2s, box-shadow 0.2s;
@@ -625,7 +635,6 @@ h1 {
     box-shadow: 0 0 12px #ff00ff44;
 }
  
-/* ── Modal ── */
 .stats-modal { z-index: 3000; overflow-y: auto; align-items: flex-start; padding: 20px; }
  
 .stats-modal-content {
@@ -648,7 +657,7 @@ h1 {
  
 .stats-modal-title {
     font-family: 'Press Start 2P', monospace;
-    font-size: 0.75rem;
+    font-size: 12px;
     color: #ff00ff;
     letter-spacing: 2px;
 }
@@ -660,11 +669,10 @@ h1 {
     border-radius: 4px;
     color: #ff5555;
     font-family: 'Press Start 2P', monospace;
-    font-size: 0.45rem;
+    font-size: 7px;
     cursor: pointer;
 }
  
-/* ── Summary cards ── */
 .stats-summary-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -682,14 +690,14 @@ h1 {
  
 .stats-summary-label {
     font-family: 'Press Start 2P', monospace;
-    font-size: 0.42rem;
+    font-size: 7px;
     color: #555;
     margin-bottom: 10px;
     letter-spacing: 1px;
 }
  
 .stats-summary-value {
-    font-size: 1.6rem;
+    font-size: 26px;
     font-weight: 700;
     color: #ff00ff;
 }
@@ -697,7 +705,6 @@ h1 {
 .stats-summary-value.magenta { color: #ff00ff; }
 .stats-summary-value.yellow  { color: #fbb03b; }
  
-/* ── Chart grid ── */
 .charts-row {
     display: flex;
     gap: 16px;
@@ -717,7 +724,7 @@ h1 {
  
 .chart-label {
     font-family: 'Press Start 2P', monospace;
-    font-size: 0.42rem;
+    font-size: 7px;
     color: #555;
     margin-bottom: 14px;
     letter-spacing: 1px;
@@ -729,7 +736,6 @@ h1 {
     display: flex; 
     align-items: center; 
     justify-content: center; 
-
 }
 .chart-wrap-donut canvas { 
     max-height: 200px; 
@@ -750,4 +756,50 @@ h1 {
     .charts-row { 
         flex-direction: column; 
     }
+}
+
+#loadingScreen {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: #050510;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+}
+
+.loader-title {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 16px;
+    background: linear-gradient(90deg, #ff00ff, #00ffff, #ff00ff);
+    background-size: 200%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: shimmer 1.5s linear infinite;
+}
+
+.loader-text {
+    margin-top: 30px;
+    font-family: 'Press Start 2P', monospace;
+    font-size: 7px;
+    color: #555;
+    letter-spacing: 3px;
+}
+
+.loader-bar-wrap {
+    margin-top: 20px;
+    width: 200px;
+    height: 2px;
+    background: #111;
+    border-radius: 2px;
+    overflow: hidden;
+}
+
+.loader-bar {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, #ff00ff, #00ffff);
+    transition: width 0.3s ease;
 }

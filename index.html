@@ -9,7 +9,15 @@
     <script src="./Javascript/index.js" defer></script>
 </head>
 <body>
- 
+    
+<div id="loadingScreen">
+    <div class="loader-title">GAME BACKLOG</div>
+    <div class="loader-text">LOADING...</div>
+    <div class="loader-bar-wrap">
+        <div id="loadingBar" class="loader-bar"></div>
+    </div>
+</div>
+
 <svg style="position:absolute;width:0;height:0;overflow:hidden" aria-hidden="true">
     <defs>
         <symbol id="check" viewBox="0 0 24 24" fill="none">
@@ -113,7 +121,7 @@
         <button class="btn-add" id="addBtn">▶ ADD GAME</button>
     </div>
  
-    <p class="counter" id="counter">LOADING...</p>
+    <p class="counter" id="counter"></p>
     <ul class="game-list" id="list"></ul>
     <div id="pagination" class="pagination"></div>
 </div>
@@ -165,7 +173,7 @@
                 <div class="stats-summary-value magenta" id="sSummaryHours">—</div>
             </div>
             <div class="stats-summary-card">
-                <div class="stats-summary-label">AVG RATING</div>
+                <div class="stats-summary-label">TOTAL RATING</div>
                 <div class="stats-summary-value yellow" id="sSummaryRating">—</div>
             </div>
         </div>
@@ -192,16 +200,6 @@
                 <div class="chart-label">TOP GAMES BY HOURS</div>
                 <div class="chart-wrap-bar">
                     <canvas id="chartHours"></canvas>
-                </div>
-            </div>
-        </div>
- 
-        
-        <div class="charts-row">
-            <div class="chart-box chart-box-wide">
-                <div class="chart-label">GAMES ADDED PER MONTH</div>
-                <div class="chart-wrap-bar">
-                    <canvas id="chartMonthly"></canvas>
                 </div>
             </div>
         </div>
