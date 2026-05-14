@@ -113,9 +113,10 @@ function escapeHtml(str) {
 
 //AUTH
 async function register() {
-    const username = document.getElementById('authUsername').value.trim();
-    const password = document.getElementById('authPassword').value;
-    
+const username = document.getElementById('authUsername').value.trim();
+const email = document.getElementById('authEmail').value.trim();
+const password = document.getElementById('authPassword').value;
+
     if (!username || !password) {
         alert('Username and password required');
         return;
@@ -709,6 +710,22 @@ document.getElementById('statsModal').addEventListener('click', function(e) {
         destroyCharts();
     }
 });
-const value = "Poly16";
-const numerical = Number.parseFloat(value);
-console.log(numerical); 
+
+
+// THEME TOGGLE
+(function initTheme() {
+    const saved = localStorage.getItem('theme') || 'dark';
+    document.documentElement.setAttribute('data-theme', saved);
+    const btn = document.getElementById('themeBtn');
+    if (btn) btn.textContent = saved === 'dark' ? '☀️ LIGHT' : '🌙 DARK';
+})();
+ 
+// Toggle between light and dark themes
+document.getElementById('themeBtn').addEventListener('click', () => {
+    const current = document.documentElement.getAttribute('data-theme');
+    const next = current === 'dark' ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', next);
+    localStorage.setItem('theme', next);
+    document.getElementById('themeBtn').textContent = next === 'dark' ? '☀️ LIGHT' : '🌙 DARK';
+});
+ 

@@ -80,15 +80,17 @@ db.run('PRAGMA journal_mode=WAL');
 // Create tables
 db.serialize(() => {
     // Users table
-    db.run(`
-        CREATE TABLE IF NOT EXISTS users (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            username TEXT UNIQUE NOT NULL,
-            password TEXT NOT NULL,
-            created_at TEXT DEFAULT (datetime('now'))
-        )
-    `);
-
+ db.run(`
+    CREATE TABLE IF NOT EXISTS users (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        username TEXT UNIQUE NOT NULL,
+        email TEXT UNIQUE NOT NULL,
+        password TEXT NOT NULL,
+        reset_token TEXT,
+        reset_expires INTEGER,
+        created_at TEXT DEFAULT (datetime('now'))
+    )
+`);
     // Games table with user_id and new fields
     db.run(`
         CREATE TABLE IF NOT EXISTS games (

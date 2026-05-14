@@ -2,20 +2,172 @@
  
 * { margin: 0; padding: 0; box-sizing: border-box; }
  
+:root {
+    --bg:           #050510;
+    --bg2:          rgba(5, 5, 16, 0.85);
+    --bg3:          #0a0a20;
+    --border:       #222;
+    --border2:      #333;
+    --text:         #e0e0e0;
+    --text2:        #888;
+    --cyan:         #00ffff;
+    --magenta:      #ff00ff;
+    --card-bg:      rgba(5, 5, 16, 0.85);
+    --input-bg:     rgba(0, 0, 0, 0.5);
+    --modal-bg:     #0a0a20;
+    --stats-modal:  #07071a;
+    --empty-color:  #333;
+    --shadow-scan:  rgba(0,0,0,0.15);
+}
+ 
+[data-theme="light"] {
+    --bg:           #f0f0f8;
+    --bg2:          rgba(240, 240, 248, 0.95);
+    --bg3:          #e0e0f0;
+    --border:       #ccc;
+    --border2:      #bbb;
+    --text:         #1a1a2e;
+    --text2:        #555;
+    --cyan:         #0066cc;
+    --magenta:      #9900cc;
+    --card-bg:      rgba(255, 255, 255, 0.9);
+    --input-bg:     rgba(255, 255, 255, 0.8);
+    --modal-bg:     #ffffff;
+    --stats-modal:  #f5f5ff;
+    --empty-color:  #aaa;
+    --shadow-scan:  rgba(0,0,0,0.05);
+    --username-color: #004466;
+}
+
+[data-theme="light"] .navbar .username,
+[data-theme="light"] .navbar a {
+    color: var(--username-color) !important;
+}
+
+[data-theme="light"] .btn-complete {
+    background: rgba(0,180,100,0.15);
+    border: 1px solid #00b46466;
+    color: #007a44;
+}
+[data-theme="light"] .btn-edit {
+    background: rgba(0,150,200,0.15);
+    border: 1px solid #0096c866;
+    color: #006688;
+}
+[data-theme="light"] .btn-delete {
+    background: rgba(200,50,50,0.15);
+    border: 1px solid #c8323266;
+    color: #b02020;
+}
+[data-theme="light"] input::placeholder,
+[data-theme="light"] select::placeholder {
+    color: #888;
+    opacity: 1;
+}
+[data-theme="light"] .auth-card::before {
+    background: #f0f0f8;
+    color: #8800aa;
+}
+[data-theme="light"] .form-card::before {
+    background: #f0f0f8;
+    color: #8800aa;
+}
+[data-theme="light"] .status-planned {
+    color: #444;
+    border-color: #888;
+}
+[data-theme="light"] .status-completed {
+    color: #007a44;
+    border-color: #007a4466;
+    background: rgba(0,180,100,0.1);
+}
+[data-theme="light"] .status-playing {
+    color: #995500;
+    border-color: #99550066;
+    background: rgba(200,150,0,0.1);
+}
+[data-theme="light"] .status-dropped {
+    color: #b02020;
+    border-color: #b0202066;
+    background: rgba(200,50,50,0.1);
+}
+[data-theme="light"] .empty {
+    color: #666;
+}
+[data-theme="light"] .counter {
+    color: #555;
+}
+[data-theme="light"] .counter span {
+    color: #0066cc;
+}
+[data-theme="light"] .game-item,
+[data-theme="light"] .navbar,
+[data-theme="light"] .form-card {
+    backdrop-filter: none !important; 
+    background: var(--bg2) !important;
+}
+
+[data-theme="light"] .current-user {
+    background: rgba(0,0,0,0.04);
+    border: 1px solid rgba(0,0,0,0.08);
+}
+.theme-btn {
+    padding: 8px 12px;
+    background: transparent;
+    border: 1px solid var(--border2);
+    border-radius: 4px;
+    color: var(--text2);
+    font-family: 'Press Start 2P', monospace;
+    font-size: 7px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+.theme-btn:hover {
+    border-color: var(--cyan);
+    color: var(--cyan);
+}
+.current-user {
+    color: var(--cyan);
+    font-family: 'Press Start 2P', monospace;
+    font-size: 8px;
+    text-shadow: 0 0 8px rgba(0,255,255,0.4);
+}
+ 
+body, .navbar, .stat-card, .filters, .form-card,
+.game-item, .modal-content, .stats-modal-content,
+.auth-card, input, select, .search-results {
+    transition: background 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+ 
+[data-theme="light"] body::before {
+    background: repeating-linear-gradient(
+        0deg, transparent, transparent 2px,
+        rgba(0,0,0,0.03) 2px, rgba(0,0,0,0.03) 4px
+    );
+}
+ 
+[data-theme="light"] input,
+[data-theme="light"] select {
+    color: var(--text);
+}
+ 
+[data-theme="light"] #loadingScreen {
+    background: var(--bg);
+}
+
 body {
-    background: #050510;
-    color: #e0e0e0;
+    background: var(--bg);
+    color: var(--text);
     font-family: 'Orbitron', Arial, sans-serif;
     min-height: 100vh;
     padding: 40px 20px;
     background-image: 
-    url(../images/1697422326_zefirka-club-p-mnogo-igr-na-odnoi-kartinke-8.jpg);
+    url(../images/bacground.jpg);
     radial-gradient(ellipse at 20% 20%, #1a003099 0%, transparent 50%),
     radial-gradient(ellipse at 80% 80%, #001a3099 0%, transparent 50%),
     linear-gradient(rgba(5, 5, 16, 0.85), rgba(5, 5, 16, 0.85));
-    background-size: auto;
     background-position: center;
-    background-repeat: no-repeat;
+    background-size: cover;
 }
  
 body::before {
@@ -24,7 +176,7 @@ body::before {
     top: 0; left: 0;
     width: 100%; height: 100%;
     background: repeating-linear-gradient(
-    0deg, transparent, transparent 2px,rgba(0,0,0,0.15) 2px, rgba(0,0,0,0.15) 4px);
+    0deg, transparent, transparent 2px, var(--shadow-scan) 2px, var(--shadow-scan) 4px);
     pointer-events: none;
     z-index: 100;
 }
@@ -35,7 +187,7 @@ h1 {
     font-size: 26px;
     margin-bottom: 8px;
     letter-spacing: 2px;
-    background: linear-gradient(90deg, #ff00ff, #00ffff, #ff00ff);
+    background: linear-gradient(90deg, var(--magenta), var(--cyan), var(--magenta));
     background-size: 200%;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -50,7 +202,7 @@ h1 {
 .subtitle {
     text-align: center;
     font-size: 10px;
-    color: #555;
+    color: var(--text2);
     letter-spacing: 4px;
     margin-bottom: 40px;
     font-family: 'Press Start 2P', monospace;
@@ -62,12 +214,12 @@ h1 {
 }
  
 .auth-card {
-    background: rgba(255,255,255,0.03);
-    border: 1px solid #ff00ff44;
+    background: var(--card-bg);
+    border: 1px solid rgba(255, 0, 255, 0.27);
     border-radius: 4px;
     padding: 30px;
     position: relative;
-    box-shadow: 0 0 30px #ff00ff22;
+    box-shadow: 0 0 30px rgba(255, 0, 255, 0.13);
 }
  
 .auth-card::before {
@@ -76,8 +228,8 @@ h1 {
     top: -11px; left: 16px;
     font-family: 'Press Start 2P', monospace;
     font-size: 9px;
-    color: #ff00ff;
-    background: #050510;
+    color: var(--magenta);
+    background: var(--bg);
     padding: 0 8px;
 }
 
@@ -85,17 +237,17 @@ h1 {
     width: 100%;
     padding: 12px;
     margin: 10px 0;
-    background: rgba(0,0,0,0.5);
-    border: 1px solid #333;
+    background: var(--input-bg);
+    border: 1px solid var(--border2);
     border-radius: 4px;
-    color: #00ffff;
+    color: var(--cyan);
     font-family: 'Orbitron', monospace;
     outline: none;
 }
  
 .auth-card input:focus {
-    border-color: #00ffff;
-    box-shadow: 0 0 10px #00ffff44;
+    border-color: var(--cyan);
+    box-shadow: 0 0 10px rgba(0, 255, 255, 0.27);
 }
  
 .auth-card button {
@@ -114,13 +266,13 @@ h1 {
 .switch-auth {
     text-align: center;
     margin-top: 20px;
-    color: #888;
+    color: var(--text2);
     cursor: pointer;
     font-size: 11px;
 }
  
 .switch-auth span {
-    color: #00ffff;
+    color: var(--cyan);
 }
  
 .main-app {
@@ -130,9 +282,9 @@ h1 {
 .navbar {
     max-width: 1000px;
     margin: 0 auto 20px;
-    background: rgba(5, 5, 16, 0.85);
+    background: var(--bg2);
     backdrop-filter: blur(4px);
-    border: 1px solid #ff00ff44;
+    border: 1px solid rgba(255, 0, 255, 0.27);
     border-radius: 4px;
     padding: 15px 20px;
     display: flex;
@@ -155,16 +307,16 @@ h1 {
     max-width: 1000px;
     margin: 0 auto 20px;
     display: grid;
-    background: rgba(5, 5, 16, 0.85);
+    background: var(--bg2);
     backdrop-filter: blur(4px);
     grid-template-columns: repeat(4, 1fr);
     gap: 15px;
 }
  
 .stat-card {
-    background: rgba(5, 5, 16, 0.85);
+    background: var(--bg2);
     backdrop-filter: blur(4px);
-    border: 1px solid #00ffff44;
+    border: 1px solid rgba(0, 255, 255, 0.27);
     border-radius: 4px;
     padding: 15px;
     text-align: center;
@@ -172,22 +324,22 @@ h1 {
  
 .stat-card h3 {
     font-size: 10px;
-    color: #888;
+    color: var(--text2);
     margin-bottom: 8px;
 }
  
 .stat-card p {
     font-size: 24px;
-    color: #00ffff;
+    color: var(--cyan);
     font-weight: bold;
 }
  
 .filters {
     max-width: 1000px;
     margin: 0 auto 20px;
-    background: rgba(5, 5, 16, 0.85);
+    background: var(--bg2);
     backdrop-filter: blur(4px);
-    border: 1px solid #333;
+    border: 1px solid var(--border2);
     border-radius: 4px;
     padding: 15px;
     display: flex;
@@ -198,28 +350,28 @@ h1 {
 .filters input, .filters select {
     flex: 1;
     padding: 8px 12px;
-    background: rgba(0,0,0,0.5);
-    border: 1px solid #333;
+    background: var(--input-bg);
+    border: 1px solid var(--border2);
     border-radius: 4px;
-    color: #00ffff;
+    color: var(--cyan);
     font-family: 'Orbitron', monospace;
 }
  
 .filters button {
     padding: 8px 16px;
-    background: rgba(0,255,255,0.1);
-    border: 1px solid #00ffff44;
+    background: rgba(0, 255, 255, 0.1);
+    border: 1px solid rgba(0, 255, 255, 0.27);
     border-radius: 4px;
-    color: #00ffff;
+    color: var(--cyan);
     cursor: pointer;
     font-family: 'Press Start 2P', monospace;
     font-size: 8px;
 }
  
 .form-card {
-    background: rgba(5, 5, 16, 0.85);
+    background: var(--bg2);
     backdrop-filter: blur(4px);
-    border: 1px solid #ff00ff44;
+    border: 1px solid rgba(255, 0, 255, 0.27);
     border-radius: 4px;
     padding: 24px;
     max-width: 1000px;
@@ -228,7 +380,7 @@ h1 {
     flex-direction: column;
     gap: 12px;
     position: relative;
-    box-shadow: 0 0 30px #ff00ff22, inset 0 0 30px rgba(255,0,255,0.03);
+    box-shadow: 0 0 30px rgba(255, 0, 255, 0.13), inset 0 0 30px rgba(255,0,255,0.03);
 }
  
 .form-card::before {
@@ -237,8 +389,8 @@ h1 {
     top: -11px; left: 16px;
     font-family: 'Press Start 2P', monospace;
     font-size: 9px;
-    color: #ff00ff;
-    background: #050510;
+    color: var(--magenta);
+    background: var(--bg);
     padding: 0 8px;
 }
  
@@ -250,18 +402,18 @@ h1 {
 .search-section input {
     width: 100%;
     padding: 10px 14px;
-    background: rgba(0,0,0,0.5);
-    border: 1px solid #333;
+    background: var(--input-bg);
+    border: 1px solid var(--border2);
     border-radius: 4px;
-    color: #00ffff;
+    color: var(--cyan);
     font-family: 'Orbitron', monospace;
     font-size: 13px;
     outline: none;
 }
  
 .search-section input:focus { 
-    border-color: #00ffff; 
-    box-shadow: 0 0 10px #00ffff44; 
+    border-color: var(--cyan); 
+    box-shadow: 0 0 10px rgba(0, 255, 255, 0.27); 
 }
  
 .search-results {
@@ -269,8 +421,8 @@ h1 {
     top: 100%;
     left: 0;
     right: 0;
-    background: #0a0a20;
-    border: 1px solid #ff00ff;
+    background: var(--modal-bg);
+    border: 1px solid var(--magenta);
     border-radius: 4px;
     max-height: 300px;
     overflow-y: auto;
@@ -284,7 +436,7 @@ h1 {
     align-items: center;
     padding: 10px;
     cursor: pointer;
-    border-bottom: 1px solid #333;
+    border-bottom: 1px solid var(--border2);
     transition: background 0.2s;
 }
  
@@ -307,13 +459,13 @@ h1 {
 .search-result-title {
     font-weight: bold;
     font-size: 12px;
-    color: #fff;
+    color: var(--text);
     margin-bottom: 4px;
 }
  
 .search-result-meta {
     font-size: 10px;
-    color: #888;
+    color: var(--text2);
 }
  
 .selected-preview {
@@ -342,16 +494,16 @@ h1 {
  
 .input-row input, .input-row select {
     padding: 10px 14px;
-    background: rgba(0,0,0,0.5);
-    border: 1px solid #333;
+    background: var(--input-bg);
+    border: 1px solid var(--border2);
     border-radius: 4px;
-    color: #00ffff;
+    color: var(--cyan);
     font-family: 'Orbitron', monospace;
     font-size: 13px;
     outline: none;
 }
  
-.input-row input:focus, .input-row select:focus { border-color: #00ffff; }
+.input-row input:focus, .input-row select:focus { border-color: var(--cyan); }
  
 .btn-add {
     padding: 10px 20px;
@@ -370,11 +522,11 @@ h1 {
     text-shadow: 0 0 10px rgba(0,0,0,0.9), 0 2px 4px rgba(0,0,0,1);
     font-family: 'Press Start 2P', monospace;
     font-size: 9px;
-    color: #555;
+    color: var(--text2);
     margin-bottom: 16px;
 }
 .counter span { 
-    color: #00ffff; 
+    color: var(--cyan); 
 }
  
 .game-list {
@@ -389,17 +541,17 @@ h1 {
 .game-item {
     display: flex;
     flex-direction: column;
-    background: rgba(5, 5, 16, 0.85);
+    background: var(--bg2);
     backdrop-filter: blur(4px);
-    border: 1px solid #222;
-    border-left: 3px solid #ff00ff;
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--magenta);
     border-radius: 4px;
     transition: border-color 0.2s, box-shadow 0.2s;
     overflow: hidden;
 }
 .game-item:hover { 
-    border-color: #ff00ff; 
-    box-shadow: 0 0 20px #ff00ff22; 
+    border-color: var(--magenta); 
+    box-shadow: 0 0 20px rgba(255, 0, 255, 0.13); 
 }
 .game-item.completed { 
     border-left-color: #00ff88; 
@@ -423,7 +575,7 @@ h1 {
 .game-title {
     font-size: 14px;
     font-weight: 700;
-    color: #fff;
+    color: var(--text);
     margin-bottom: 8px;
 }
  
@@ -437,8 +589,8 @@ h1 {
  
 .platform-badge {
     font-size: 9px;
-    color: #888;
-    border: 1px solid #333;
+    color: var(--text2);
+    border: 1px solid var(--border2);
     border-radius: 3px;
     padding: 2px 6px;
     font-family: 'Press Start 2P', monospace;
@@ -452,8 +604,8 @@ h1 {
 }
  
 .status-planned { 
-    color: #888; 
-    border: 1px solid #333; 
+    color: var(--text2); 
+    border: 1px solid var(--border2); 
 }
 .status-completed { 
     color: #00ff88; 
@@ -483,22 +635,22 @@ h1 {
     gap: 12px;
     margin: 8px 0;
     font-size: 11px;
-    color: #888;
+    color: var(--text2);
 }
  
-.game-details span { color: #00ffff; }
+.game-details span { color: var(--cyan); }
  
 .tags {
     font-size: 10px;
-    color: #555;
+    color: var(--text2);
     margin-top: 8px;
 }
 
 .platform-tag {
     font-size: 9px;
     font-family: 'Press Start 2P', monospace;
-    color: #888;
-    border: 1px solid #333;
+    color: var(--text2);
+    border: 1px solid var(--border2);
     border-radius: 3px;
     padding: 2px 8px;
     background: rgba(255,255,255,0.03);
@@ -509,7 +661,7 @@ h1 {
     display: flex;
     gap: 8px;
     padding: 10px;
-    border-top: 1px solid #222;
+    border-top: 1px solid var(--border);
 }
  
 .game-actions button {
@@ -522,18 +674,17 @@ h1 {
     font-size: 7px;
 }
  
+/* Default Dark Mode Buttons */
 .btn-complete {
     background: rgba(0,255,136,0.1);
     border: 1px solid #00ff8844;
     color: #00ff88;
 }
- 
 .btn-edit {
     background: rgba(0,255,255,0.1);
     border: 1px solid #00ffff44;
     color: #00ffff;
 }
- 
 .btn-delete {
     background: rgba(255,50,50,0.1);
     border: 1px solid #ff333344;
@@ -542,7 +693,7 @@ h1 {
  
 .empty {
     text-align: center;
-    color: #333;
+    color: var(--empty-color);
     font-family: 'Press Start 2P', monospace;
     font-size: 10px;
     padding: 60px 20px;
@@ -563,9 +714,9 @@ h1 {
 }
  
 .modal-content {
-    background: rgba(5, 5, 16, 0.85);
+    background: var(--bg2);
     backdrop-filter: blur(4px);
-    border: 1px solid #ff00ff;
+    border: 1px solid var(--magenta);
     border-radius: 4px;
     padding: 30px;
     max-width: 500px;
@@ -574,17 +725,17 @@ h1 {
  
 .modal-content h3 {
     margin-bottom: 20px;
-    color: #ff00ff;
+    color: var(--magenta);
 }
  
 .modal-content input, .modal-content select {
     width: 100%;
     padding: 10px;
     margin: 10px 0;
-    background: rgba(0,0,0,0.5);
-    border: 1px solid #333;
+    background: var(--input-bg);
+    border: 1px solid var(--border2);
     border-radius: 4px;
-    color: #00ffff;
+    color: var(--cyan);
     font-family: 'Orbitron', monospace;
 }
  
@@ -612,9 +763,9 @@ h1 {
 .pagination button {
     padding: 8px 12px;
     background: rgba(255,255,255,0.05);
-    border: 1px solid #333;
+    border: 1px solid var(--border2);
     border-radius: 4px;
-    color: #00ffff;
+    color: var(--cyan);
     cursor: pointer;
 }
 
@@ -623,7 +774,7 @@ h1 {
     background: rgba(255, 0, 255, 0.15);
     border: 1px solid #ff00ff66;
     border-radius: 4px;
-    color: #ff00ff;
+    color: var(--magenta);
     font-family: 'Press Start 2P', monospace;
     font-size: 8px;
     cursor: pointer;
@@ -638,7 +789,7 @@ h1 {
 .stats-modal { z-index: 3000; overflow-y: auto; align-items: flex-start; padding: 20px; }
  
 .stats-modal-content {
-    background: #07071a;
+    background: var(--stats-modal);
     border: 1px solid #ff00ff55;
     border-radius: 6px;
     padding: 28px;
@@ -658,7 +809,7 @@ h1 {
 .stats-modal-title {
     font-family: 'Press Start 2P', monospace;
     font-size: 12px;
-    color: #ff00ff;
+    color: var(--magenta);
     letter-spacing: 2px;
 }
  
@@ -691,7 +842,7 @@ h1 {
 .stats-summary-label {
     font-family: 'Press Start 2P', monospace;
     font-size: 7px;
-    color: #555;
+    color: var(--text2);
     margin-bottom: 10px;
     letter-spacing: 1px;
 }
@@ -699,10 +850,10 @@ h1 {
 .stats-summary-value {
     font-size: 26px;
     font-weight: 700;
-    color: #ff00ff;
+    color: var(--magenta);
 }
-.stats-summary-value.cyan    { color: #00ffff; }
-.stats-summary-value.magenta { color: #ff00ff; }
+.stats-summary-value.cyan    { color: var(--cyan); }
+.stats-summary-value.magenta { color: var(--magenta); }
 .stats-summary-value.yellow  { color: #fbb03b; }
  
 .charts-row {
@@ -725,7 +876,7 @@ h1 {
 .chart-label {
     font-family: 'Press Start 2P', monospace;
     font-size: 7px;
-    color: #555;
+    color: var(--text2);
     margin-bottom: 14px;
     letter-spacing: 1px;
 }
@@ -762,7 +913,7 @@ h1 {
     position: fixed;
     top: 0; left: 0;
     width: 100%; height: 100%;
-    background: #050510;
+    background: var(--bg);
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -773,7 +924,7 @@ h1 {
 .loader-title {
     font-family: 'Press Start 2P', monospace;
     font-size: 16px;
-    background: linear-gradient(90deg, #ff00ff, #00ffff, #ff00ff);
+    background: linear-gradient(90deg, var(--magenta), var(--cyan), var(--magenta));
     background-size: 200%;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -784,7 +935,7 @@ h1 {
     margin-top: 30px;
     font-family: 'Press Start 2P', monospace;
     font-size: 7px;
-    color: #555;
+    color: var(--text2);
     letter-spacing: 3px;
 }
 

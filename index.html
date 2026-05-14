@@ -9,7 +9,7 @@
     <script src="./Javascript/index.js" defer></script>
 </head>
 <body>
-    
+
 <div id="loadingScreen">
     <div class="loader-title">GAME BACKLOG</div>
     <div class="loader-text">LOADING...</div>
@@ -37,6 +37,7 @@
 <div id="authContainer" class="auth-container">
     <div class="auth-card">
         <h2 id="authTitle" style="text-align:center; margin-bottom:20px;">LOGIN</h2>
+        <input type="email" id="authEmail" placeholder="EMAIL">
         <input type="text" id="authUsername" placeholder="USERNAME">
         <input type="password" id="authPassword" placeholder="PASSWORD">
         <button id="authBtn">LOGIN</button>
@@ -50,10 +51,11 @@
 <div id="mainApp" class="main-app">
  
     <div class="navbar">
+        <button class="theme-btn" id="themeBtn">☀️ LIGHT</button>
         <span style="color:#ff00ff;">GAME BACKLOG</span>
         <div style="display:flex; align-items:center; gap:10px;">
-            <span id="currentUser" style="color:#00ffff;"></span>
-            <!-- ✅ КНОПКА СТАТИСТИКИ -->
+            <span id="currentUser" class="current-user"></span>
+            <!-- ✅ Button statistics -->
             <button class="stats-btn" id="statsBtn">📊 STATS</button>
             <button class="logout-btn" id="logoutBtn">LOGOUT</button>
         </div>
