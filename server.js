@@ -9,6 +9,8 @@ const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
 const { setupSwagger } = require('./swagger');
+const nodemailer = require('nodemailer');
+const crypto = require('crypto');
 
 
 const app = express();
@@ -132,11 +134,16 @@ const authenticateToken = (req, res, next) => {
 
 // Auth routes
 app.post('/auth/register', async (req, res) => {
-    const { username, password } = req.body;
+    const { username, email, password } = req.body;
     
     if (!username || !password) {
         return res.status(400).json({ error: 'Username and password required' });
     }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+    return res.status(400).json({ error: 'Invalid email format' });
+        }
     
     if (password.length < 6) {
         return res.status(400).json({ error: 'Password must be at least 6 characters' });
@@ -146,12 +153,12 @@ app.post('/auth/register', async (req, res) => {
         const hashedPassword = await bcrypt.hash(password, 10);
         
         db.run(
-            'INSERT INTO users (username, password) VALUES (?, ?)',
-            [username, hashedPassword],
+            'INSERT INTO users (username, email, password) VALUES (?, ?, ?)',
+                [username, email, hashedPassword],
             function(err) {
                 if (err) {
                     if (err.message.includes('UNIQUE')) {
-                        return res.status(400).json({ error: 'Username already exists' });
+                        return res.status(400).json({ error: 'Username or email already exists' });
                     }
                     return res.status(500).json({ error: 'Registration failed' });
                 }
@@ -199,7 +206,110 @@ app.post('/auth/login', (req, res) => {
         }
     );
 });
+app.post('/auth/forgot-password', (req, res) => {
+    const { email } = req.body;
 
+    if (!email) {
+        return res.status(400).json({ error: 'Email required' });
+    }
+
+    db.get('SELECT * FROM users WHERE email = ?', [email], async (err, user) => {
+        if (err) return res.status(500).json({ error: err.message });
+
+        if (!user) {
+            return res.json({ message: 'If email exists, reset link sent' });
+        }
+
+        try {
+            const resetToken = crypto.randomBytes(32).toString('hex');
+            const resetExpires = Date.now() + 1000 * 60 * 15;
+
+            db.run(
+                `UPDATE users SET reset_token = ?, reset_expires = ? WHERE id = ?`,
+                [resetToken, resetExpires, user.id]
+            );
+
+            const transporter = nodemailer.createTransport({
+                host: process.env.SMTP_HOST,
+                port: Number(process.env.SMTP_PORT),
+                auth: {
+                    user: process.env.SMTP_USER,
+                    pass: process.env.SMTP_PASSWORD
+                }
+            });
+
+            const resetLink = `http://localhost:3000/reset-password.html?token=${resetToken}`;
+
+            await transporter.sendMail({
+    from: process.env.SMTP_FROM,
+    to: email,
+    subject: '🎮 Game Backlog — Password Reset',
+    html: `
+        <div style="background:#0a0a0f; padding:40px; font-family:'Courier New',monospace; color:#eee; max-width:480px; margin:0 auto; border-radius:8px;">
+            
+            <h1 style="color:#ff00ff; letter-spacing:4px; margin-bottom:4px;">GAME BACKLOG</h1>
+            <p style="color:#555; font-size:12px; margin-top:0;">// PASSWORD RESET REQUEST</p>
+            
+            <hr style="border:none; border-top:1px solid #222; margin:24px 0;">
+            
+            <p style="color:#aaa;">We received a request to reset your password.</p>
+            <p style="color:#aaa;">Click the button below to set a new password:</p>
+            
+            <div style="text-align:center; margin:32px 0;">
+                <a href="${resetLink}" 
+                   style="background:#ff00ff; color:#000; padding:14px 32px; text-decoration:none; 
+                          font-weight:bold; letter-spacing:2px; border-radius:4px; display:inline-block;">
+                    ▶ RESET PASSWORD
+                </a>
+            </div>
+            
+            <p style="color:#555; font-size:11px;">⏱ This link expires in <strong style="color:#ffaa00;">15 minutes</strong>.</p>
+            <p style="color:#555; font-size:11px;">If you didn't request this, simply ignore this email.</p>
+            
+            <hr style="border:none; border-top:1px solid #222; margin:24px 0;">
+            <p style="color:#333; font-size:10px; text-align:center;">Game Backlog — Track your gaming journey</p>
+        </div>
+    `
+});
+
+            res.json({ message: 'Reset email sent' });
+
+        } catch (e) {
+            console.error(e);
+            res.status(500).json({ error: 'Email sending failed' });
+        }
+    });
+});
+
+
+// 2. RESET PASSWORD CONFIRM
+app.post('/auth/reset-password', (req, res) => {
+    const { token, newPassword } = req.body;
+
+    if (!token || !newPassword) {
+        return res.status(400).json({ error: 'Missing data' });
+    }
+
+    db.get(
+        `SELECT * FROM users WHERE reset_token = ? AND reset_expires > ?`,
+        [token, Date.now()],
+        async (err, user) => {
+            if (err) return res.status(500).json({ error: err.message });
+            if (!user) return res.status(400).json({ error: 'Invalid or expired token' });
+
+            const hashed = await bcrypt.hash(newPassword, 10);
+
+            db.run(
+                `UPDATE users 
+                 SET password = ?, reset_token = NULL, reset_expires = NULL 
+                 WHERE id = ?`,
+                [hashed, user.id]
+            );
+
+            res.json({ message: 'Password updated successfully' });
+        }
+    );
+});
 // Games routes with filtering, sorting, search, and pagination
 app.get('/games', authenticateToken, (req, res) => {
     const userId = req.user.id;

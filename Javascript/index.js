@@ -117,15 +117,20 @@ const username = document.getElementById('authUsername').value.trim();
 const email = document.getElementById('authEmail').value.trim();
 const password = document.getElementById('authPassword').value;
 
-    if (!username || !password) {
-        alert('Username and password required');
+    if (!username || !email || !password) {
+        alert('All fields are required');
+        return;
+    }
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+        alert('Invalid email format');
         return;
     }
     
     const response = await fetch('/auth/register', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username, password })
+        body: JSON.stringify({ username, email, password })
     });
     
     if (response.ok) {
@@ -436,15 +441,42 @@ document.getElementById('switchAuth').addEventListener('click', () => {
     const title = document.getElementById('authTitle');
     const btn = document.getElementById('authBtn');
     const switchText = document.getElementById('switchAuth');
+    const emailField = document.getElementById('authEmail');
     
     if (title.innerText === 'LOGIN') {
         title.innerText = 'REGISTER';
         btn.innerText = 'REGISTER';
         switchText.innerHTML = 'HAVE ACCOUNT? <span>LOGIN</span>';
+        emailField.style.display = 'block';
     } else {
         title.innerText = 'LOGIN';
         btn.innerText = 'LOGIN';
         switchText.innerHTML = 'NO ACCOUNT? <span>REGISTER</span>';
+        emailField.style.display = 'none';
+    }
+});
+
+document.getElementById('forgotPasswordBtn')
+.addEventListener('click', async () => {
+
+    const email = prompt('Enter your email');
+
+    if (!email) return;
+
+    const response = await fetch('/auth/forgot-password', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ email })
+    });
+
+    const data = await response.json();
+
+    if (response.ok) {
+        alert('Reset email sent');
+    } else {
+        alert(data.error);
     }
 });
 
