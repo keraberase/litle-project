@@ -89,7 +89,7 @@ SMTP_FROM=your_email@gmail.com
 ```
  
 ```bash
-node index.js
+node server.js
 ```
  
 Open `http://localhost:3000`
