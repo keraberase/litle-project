@@ -1,6 +1,6 @@
 # 🎮 Game Backlog
  
-**Author:** Reuta Sergey  
+**Author:** Reuta Serhii  
 **Date:** May 2026
  
 ---
@@ -35,7 +35,6 @@ Retro-cyberpunk style — dark background, cyan/magenta accents, scanline overla
 | Game data | IGDB API v4 + Twitch OAuth2 |
 | HTTP client | Axios |
 | API docs | Swagger (swagger-jsdoc + swagger-ui-express) |
-| Charts | Chart.js 4.4 |
 | Fonts | Google Fonts (CDN) |
  
 ---
