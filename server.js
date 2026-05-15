@@ -578,7 +578,7 @@ app.delete('/games/:id', authenticateToken, (req, res) => {
         db.run('DELETE FROM games WHERE id = ? AND user_id = ?', [id, userId], function(err) {
             if (err) return res.status(500).json({ error: err.message });
             
-            // Delete local cover file only (not IGDB URLs)
+            // Delete local cover file only 
             if (game.cover_url && !game.cover_url.startsWith('http')) {
                 const coverPath = path.join(__dirname, game.cover_url);
                 if (fs.existsSync(coverPath)) fs.unlinkSync(coverPath);
