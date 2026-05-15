@@ -415,7 +415,7 @@ function clearForm() {
     document.getElementById('selectedPreview').style.display = 'none';
 }
 
-// ============= UI =============
+// UI 
 function showMainApp() {
     document.getElementById('authContainer').style.display = 'none';
     document.getElementById('mainApp').style.display = 'block';
@@ -430,7 +430,7 @@ function showAuthForm() {
     document.getElementById('authPassword').value = '';
 }
 
-// ============= EVENT LISTENERS =============
+// EVENT LISTENERS
 document.getElementById('authBtn').addEventListener('click', () => {
     const isLogin = document.getElementById('authTitle').innerText === 'LOGIN';
     if (isLogin) login();

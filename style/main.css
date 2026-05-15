@@ -132,7 +132,7 @@
     font-size: 8px;
     text-shadow: 0 0 8px rgba(0,255,255,0.4);
 }
- 
+
 body, .navbar, .stat-card, .filters, .form-card,
 .game-item, .modal-content, .stats-modal-content,
 .auth-card, input, select, .search-results {

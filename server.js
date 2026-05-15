@@ -282,7 +282,7 @@ app.post('/auth/forgot-password', (req, res) => {
 });
 
 
-// 2. RESET PASSWORD CONFIRM
+// RESET PASSWORD CONFIRM
 app.post('/auth/reset-password', (req, res) => {
     const { token, newPassword } = req.body;
 
