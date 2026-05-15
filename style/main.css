@@ -546,12 +546,13 @@ h1 {
     border: 1px solid var(--border);
     border-left: 3px solid var(--magenta);
     border-radius: 4px;
-    transition: border-color 0.2s, box-shadow 0.2s;
+      transition: border-color 0.2s, box-shadow 0.2s, transform 0.2s;
     overflow: hidden;
 }
 .game-item:hover { 
     border-color: var(--magenta); 
-    box-shadow: 0 0 20px rgba(255, 0, 255, 0.13); 
+    box-shadow: 0 0 20px rgba(255, 0, 255, 0.13);
+    transform: translateY(-6px);
 }
 .game-item.completed { 
     border-left-color: #00ff88; 
