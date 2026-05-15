@@ -1,48 +1,61 @@
 🎮 Game Backlog
 Author: Reuta Sergey
 Date: May 2026
-A full-stack web application for tracking your personal video game library — log games, track hours, rate titles, and analyse your gaming habits.
 
 Purpose
-Gamers often lose track of what they own, what they've played, and what's still waiting. Game Backlog solves this with a centralised, user-authenticated dashboard where you can add games via IGDB search (with automatic cover art), assign a play status, log hours, and view stats and charts of your collection.
+A personal web app to track your video game collection. Add games via IGDB search (auto cover art), set a play status, log hours played, give a star rating, and view stats and charts of your library.
+
 Target Audience
-Video game enthusiasts who own games across multiple platforms and want a structured way to manage their backlog — whether they're completionists tracking 100% runs, players with large unplayed libraries, or anyone who likes logging ratings and time spent.
-Design Approach
-The UI follows a retro-cyberpunk aesthetic — dark backgrounds, cyan/magenta accents, a scanline overlay, and pixel fonts (Press Start 2P + Orbitron) — chosen to resonate with the gaming audience it serves. A full light mode is available via toggle. Layout uses CSS Grid for a responsive card-based library that adapts from 3 columns on desktop to a single column on mobile.
+Gamers who own games across multiple platforms and want one place to manage their backlog — whether tracking completions, logging playtime, or just keeping a list of what to play next.
+
+Design
+Retro-cyberpunk style — dark background, cyan/magenta accents, scanline overlay, pixel fonts (Press Start 2P + Orbitron). Includes a light mode toggle. Responsive CSS Grid layout that works on desktop and mobile.
 
 Technologies
-Backend
+LayerTechServerNode.js, ExpressDatabaseSQLite3AuthJWT, bcryptEmailNodemailer (Brevo SMTP)File uploadsMulterGame dataIGDB API v4 + Twitch OAuth2HTTP clientAxiosAPI docsSwagger (swagger-jsdoc + swagger-ui-express)ChartsChart.js 4.4FontsGoogle Fonts (CDN)
 
-Node.js + Express — server and REST API
-SQLite3 — embedded database (WAL mode)
-bcrypt — password hashing
-jsonwebtoken — JWT authentication
-Multer — cover image uploads
-Nodemailer — password reset emails
-Axios — IGDB / Twitch OAuth requests
-swagger-jsdoc + swagger-ui-express — API docs at /api-docs
+Features
 
-Frontend
-
-HTML5 / CSS3 / Vanilla JavaScript
-Chart.js 4.4 — stats charts (doughnut, bar)
-Google Fonts CDN — Press Start 2P, Orbitron
-
-External Services
-
-IGDB API v4 — game search, cover art, platform data
-Twitch OAuth2 — IGDB bearer token
-SMTP (configurable) — password reset email delivery
+Register / Login / Logout with JWT authentication
+Password reset via email (token expires in 15 min)
+Search games on IGDB with auto-fill cover art and platforms
+Add, edit, delete games
+Statuses: Planned, Playing, Completed, Dropped
+Log hours played and 1–5 star rating
+Filter by status, search by title, sort by date/rating/hours
+Pagination (9 games per page)
+Stats modal — status chart, rating chart, top games by hours
+Dark / Light theme toggle
+CSV and PDF export
+API documentation at /api-docs
 
 
 Potential Improvements
 
-Refresh tokens — replace 24h JWT with short-lived access + refresh token pair
-PostgreSQL — migrate from SQLite for multi-user scalability
-Rate limiting — add express-rate-limit on auth routes
-Drag-and-drop queue — let users manually order their Planned list
-Wishlist status — a fifth status for games not yet owned
-Platform breakdown chart — visualise library split by platform
-PWA support — manifest + service worker for mobile install and offline access
-Yearly wrap-up — annual stats summary (Spotify Wrapped–style)
-Automated tests — Jest unit tests for auth and CRUD routes
+Refresh tokens instead of 24h JWT
+Migrate to PostgreSQL for scalability
+Rate limiting on auth routes
+Drag-and-drop ordering for the Planned queue
+Wishlist status for games not yet owned
+Platform breakdown chart
+PWA support (offline + mobile install)
+Yearly wrap-up stats page
+Unit tests with Jest
+
+
+Setup
+npm install
+
+Create a .env file:
+PORT=3000
+JWT_SECRET=your_secret
+TWITCH_CLIENT_ID=your_id
+TWITCH_CLIENT_SECRET=your_secret
+SMTP_HOST=smtp-relay.brevo.com
+SMTP_PORT=587
+SMTP_USER=your_smtp_user
+SMTP_PASSWORD=your_smtp_password
+SMTP_FROM=your_email@gmail.com
+bashnode index.js
+
+Open http://localhost:3000

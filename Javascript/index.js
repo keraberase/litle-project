@@ -386,13 +386,6 @@ async function saveEdit() {
     }
 }
 
-async function exportCSV() {
-    window.open('/export/csv', '_blank');
-}
-
-async function exportPDF() {
-    window.open('/export/pdf', '_blank');
-}
 
 function renderStars(rating) {
     if (!rating) return '<span style="color:#333;">NOT RATED</span>';
